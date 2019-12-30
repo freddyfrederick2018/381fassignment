@@ -61,7 +61,7 @@ app.post('/upload', (req,res) => {
         }
         const db = client.db(dbName);
         
-		var ExifImage = require('exif').ExifImage;
+		var ExifImage = require('./lib/exif').ExifImage;
 		
 		try {
 		    new ExifImage({ image : filename }, function (error, exifData) {
