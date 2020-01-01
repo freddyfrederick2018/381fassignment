@@ -1,29 +1,65 @@
 <!DOCTYPE html>
+<head>
+	<style type="text/css">
+	.form-style-1 {
+		margin:10px auto;
+		max-width: 400px;
+		padding: 20px 12px 10px 20px;
+		font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	}
+	.form-style-1 li {
+		padding: 0;
+		display: block;
+		list-style: none;
+		margin: 10px 0 0 0;
+	}
+	.form-style-1 label{
+		margin:0 0 3px 0;
+		padding:0px;
+		display:block;
+		font-weight: bold;
+	}
+		
+	.form-style-1 .field-long{
+		width: 100%;
+	}
+	.form-style-1 .field-select{
+		width: 100%;
+	}
+	
+	.form-style-1 .required{
+		color:red;
+	}
+</style>
+</head>
 <html>
-<title>Upload a photo</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
-<body>
-
-<div class="w3-container w3-teal">
-  <h1>Upload a photo</h1>
-</div>
-
-<form action="upload" method="post" enctype="multipart/form-data"
-      class="w3-container" style="width:100%">
-  <p>
-  <input name="title" class="w3-input" type="text" required>
-  <label class="w3-label w3-validate">Title</label></p>
-  <p>
-  <input name="description"class="w3-input" type="text" required>
-  <label class="w3-label w3-validate">Description</label></p>
-  <input name="filetoupload"class="w3-input" type="file">
-  <label class="w3-label w3-validate">Photo</label></p>
-  <p>
-  <button class="w3-btn w3-section w3-teal w3-ripple"> Upload </button></p>
-</form>
-<br>
-<a href=/photos>Photo List</a>
-</body>
+	<title>Upload a photo</title>
+	<body>
+	
+	<form action="upload" method="post" enctype="multipart/form-data">
+	<ul class="form-style-1">
+	    <li>
+	    	<label>Title<span class="required">*</span></label>
+	    	<input type="text" name="title" class="field-long" placeholder="Enter a title" required/> 	
+	    </li>
+	    <li>
+	        <label>Description<span class="required">*</span></label>
+	        <input type="text" name="description" class="field-long" placeholder="Enter descriptions" required/>
+	    </li>
+	    <li>
+	        <input name="filetoupload" type="file">
+	    </li>
+	    <li>
+	        <button> Upload </button>
+	    </li>
+	</ul>
+	</form>
+	<ul class="form-style-1">
+	<li>
+		<a href=/photos>Photo List</a>
+	<li>
+	</ul>
+	</body>
 </html>
+
 

@@ -4,9 +4,9 @@
 <head>
 <title>Uploaded photo</title>
 <style type="text/css">
-    #wrapper {
-    width: 100%;
-    overflow: hidden; 
+	#wrapper {
+	    width: 100%;
+	    overflow: hidden; 
    	}
 	#first {
 	    width: 70%;
@@ -15,7 +15,8 @@
 	#second {
 	    overflow: hidden; 
 	}
-</style></head>
+
+    </style></head>
 <body>
 	<div id="wrapper">
 		<h1><%=photo[0].title%></h1>
@@ -32,7 +33,7 @@
 	        <p>Longitude: <%=photo[0].coord[0]%></>
 	        <p>Latitude: <%=photo[0].coord[1]%></>        
 		    <br><br>
-			<a href="/map/<%=photo[0]._id%>">Map</a>
+			<p>Location service is not available</p>
 	    </div>
 	</div>
 	<br>

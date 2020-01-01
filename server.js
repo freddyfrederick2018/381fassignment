@@ -48,71 +48,79 @@ app.post('/upload', (req,res) => {
       if (files.filetoupload.type) {
         var mimetype = files.filetoupload.type;
         console.log(`mimetype = ${mimetype}`);
-      }
-      
-	
-	fs.readFile(filename, (err,data) => {
-      let client = new MongoClient(mongourl);
-      client.connect((err) => {
-        try {
-          assert.equal(err,null);
-        } catch (err) {
-          res.status(500).end("MongoClient connect() failed!");
-        }
-        const db = client.db(dbName);
         
-		var ExifImage = require('./lib/exif').ExifImage;
-		
-		try {
-		    new ExifImage({ image : filename }, function (error, exifData) {
-		        if (error)
-		            console.log('Error: '+error.message);
-		        else
-		           // console.log(exifData); // Do something with your data!
-		           	var new_r = {};
-		           	new_r['title'] = title;
-				   	new_r['description'] = description;
-		            new_r['make'] = exifData.image.Make;
-		            new_r['model'] = exifData.image.Model;
-		            new_r['date'] = exifData.image.ModifyDate;
-		            new_r['image'] = new Buffer.from(data).toString('base64');		            
-		            
-		            if(exifData.gps.GPSLatitudeRef=='N' && exifData.gps.GPSLongitudeRef=='E'){
-			            var lon = exifData.gps.GPSLongitude[0] + exifData.gps.GPSLongitude[1]/60 + exifData.gps.GPSLongitude[2]/3600; 
-			            var lat = exifData.gps.GPSLatitude[0] + exifData.gps.GPSLatitude[1]/60 + exifData.gps.GPSLatitude[2]/3600;
-			            new_r['coord'] = [lon, lat];
-		            }else if(exifData.gps.GPSLatitudeRef=='S' && exifData.gps.GPSLongitudeRef=='E'){
-			            var lon = exifData.gps.GPSLongitude[0] + exifData.gps.GPSLongitude[1]/60 + exifData.gps.GPSLongitude[2]/3600; 
-			            var lat = -1 * (exifData.gps.GPSLatitude[0] + exifData.gps.GPSLatitude[1]/60 + exifData.gps.GPSLatitude[2]/3600);
-			            new_r['coord'] = [lon, lat];
-		            }else if(exifData.gps.GPSLatitudeRef=='S' && exifData.gps.GPSLongitudeRef=='W'){
-			            var lon = -1 * (exifData.gps.GPSLongitude[0] + exifData.gps.GPSLongitude[1]/60 + exifData.gps.GPSLongitude[2]/3600); 
-			            var lat = -1 * (exifData.gps.GPSLatitude[0] + exifData.gps.GPSLatitude[1]/60 + exifData.gps.GPSLatitude[2]/3600);
-			            new_r['coord'] = [lon, lat];
-		            }else if(exifData.gps.GPSLatitudeRef=='N' && exifData.gps.GPSLongitudeRef=='W'){
-			            var lon = -1 * (exifData.gps.GPSLongitude[0] + exifData.gps.GPSLongitude[1]/60 + exifData.gps.GPSLongitude[2]/3600); 
-			            var lat = exifData.gps.GPSLatitude[0] + exifData.gps.GPSLatitude[1]/60 + exifData.gps.GPSLatitude[2]/3600;
-			            new_r['coord'] = [lon, lat];
-		            }else{
-			            var lon = null;
-			            var lat = null;
-			            new_r['coord'] = [lon, lat];
-		            }
-		            
-		            insertPhoto(db,new_r,(result) => {
-						console.log(result);
-						var id = result.insertedId;
-						client.close();
-						res.redirect(`/display?_id=${id}`);
-        			});
-		    });
-		} catch (error) {
-		    console.log('Error: ' + error.message);
-		}
-		
-      });
-	});
+      }  
+      if(mimetype == "image/jpeg"){
+		fs.readFile(filename, (err,data) => {
+	  
+	      let client = new MongoClient(mongourl);
+	      client.connect((err) => {
+	        try {
+	          assert.equal(err,null);
+	        } catch (err) {
+	          res.status(500).end("MongoClient connect() failed!");
+	        }
+	        const db = client.db(dbName);
+	        
+			var ExifImage = require('./lib/exif').ExifImage;
+			
+			try {
+			    new ExifImage({ image : filename }, function (error, exifData) {
+			        if (error)
+			            console.log('Error: '+error.message);
+			        else
+			           // console.log(exifData); // Do something with your data!
+			           	var new_r = {};
+			           	new_r['title'] = title;
+					   	new_r['description'] = description;
+			            new_r['make'] = exifData.image.Make;
+			            new_r['model'] = exifData.image.Model;
+			            new_r['date'] = exifData.image.ModifyDate;
+			            new_r['image'] = new Buffer.from(data).toString('base64');		            
+			            
+			            if(exifData.gps.GPSLatitudeRef=='N' && exifData.gps.GPSLongitudeRef=='E'){
+				            var lon = exifData.gps.GPSLongitude[0] + exifData.gps.GPSLongitude[1]/60 + exifData.gps.GPSLongitude[2]/3600; 
+				            var lat = exifData.gps.GPSLatitude[0] + exifData.gps.GPSLatitude[1]/60 + exifData.gps.GPSLatitude[2]/3600;
+				            new_r['coord'] = [lon, lat];
+			            }else if(exifData.gps.GPSLatitudeRef=='S' && exifData.gps.GPSLongitudeRef=='E'){
+				            var lon = exifData.gps.GPSLongitude[0] + exifData.gps.GPSLongitude[1]/60 + exifData.gps.GPSLongitude[2]/3600; 
+				            var lat = -1 * (exifData.gps.GPSLatitude[0] + exifData.gps.GPSLatitude[1]/60 + exifData.gps.GPSLatitude[2]/3600);
+				            new_r['coord'] = [lon, lat];
+			            }else if(exifData.gps.GPSLatitudeRef=='S' && exifData.gps.GPSLongitudeRef=='W'){
+				            var lon = -1 * (exifData.gps.GPSLongitude[0] + exifData.gps.GPSLongitude[1]/60 + exifData.gps.GPSLongitude[2]/3600); 
+				            var lat = -1 * (exifData.gps.GPSLatitude[0] + exifData.gps.GPSLatitude[1]/60 + exifData.gps.GPSLatitude[2]/3600);
+				            new_r['coord'] = [lon, lat];
+			            }else if(exifData.gps.GPSLatitudeRef=='N' && exifData.gps.GPSLongitudeRef=='W'){
+				            var lon = -1 * (exifData.gps.GPSLongitude[0] + exifData.gps.GPSLongitude[1]/60 + exifData.gps.GPSLongitude[2]/3600); 
+				            var lat = exifData.gps.GPSLatitude[0] + exifData.gps.GPSLatitude[1]/60 + exifData.gps.GPSLatitude[2]/3600;
+				            new_r['coord'] = [lon, lat];
+			            }else{
+				            var lon = null;
+				            var lat = null;
+				            new_r['coord'] = [lon, lat];
+			            }
+			            
+			            insertPhoto(db,new_r,(result) => {
+							console.log(result);
+							var id = result.insertedId;
+							client.close();
+							res.redirect(`/display?_id=${id}`);
+	        			});
+			    });
+			} catch (error) {
+			    console.log('Error: ' + error.message);
+			    res.end('Error: ' + error.message);
+			}
+		  	
+	      });
+    
+	  });
+	  }else{
+		  res.end("Please upload a JPEG image.");
+	  }
+	
   });
+  
 });
 
 app.get('/photos', (req,res) => {
@@ -153,11 +161,41 @@ app.get('/display', (req,res) => {
       console.log('Photo returned = ' + photo.length);
       let image = new Buffer(photo[0].image,'base64');     
       console.log(photo[0].mimetype);
-  	  res.render('photo.ejs',{photo:photo});
-	  
+      if(photo[0].coord[0]!=null && photo[0].coord[1]!=null){
+	      res.render('photo.ejs',{photo:photo});
+      }else{
+	      res.render('photonogps.ejs',{photo:photo});
+      }
+  	  
     });
   });
 });
+
+app.get('/map/:id', (req,res) => {
+  
+  let client = new MongoClient(mongourl);
+  client.connect((err) => {
+    try {
+      assert.equal(err,null);
+    } catch (err) {
+      res.status(500).end("MongoClient connect() failed!");
+    }      
+    console.log('Connected to MongoDB');
+    const db = client.db(dbName);
+    let id = req.params.id;
+    findPhoto(db,{_id: new mongo.ObjectID(id)},(photo) => {
+      client.close();
+      console.log('Disconnected MongoDB');
+      console.log('Photo returned = ' + photo.length);
+      let image = new Buffer(photo[0].image,'base64');     
+      console.log(photo[0].coord);
+      
+      res.render('map.ejs',{photo:photo});
+
+    });
+  });
+});
+
 
 function insertPhoto(db,r,callback) {
   db.collection('photo').insertOne(r,function(err,result) {
