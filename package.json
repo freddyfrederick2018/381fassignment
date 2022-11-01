@@ -29,7 +29,7 @@
     "formidable": "latest"
   },
   "devDependencies": {
-    "mocha": "^2.4"
+    "mocha": "^10.1"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha --reporter spec test/*-test.js"
